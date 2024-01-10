@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import React from "react";
+import React, { useState } from "react";
 import {
   FaFacebookF,
   FaGooglePlusG,
@@ -11,6 +11,33 @@ import { Link } from "react-router-dom";
 import Heading from "../Heading/Heading";
 
 function Contact() {
+  const [email, setEmail] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [emailError, setEmailError] = useState("");
+  const [nameError, setNameError] = useState("");
+  const handleEmail = (e) => {
+    setEmail(e.target.value);
+    setEmailError("");
+  };
+
+  const handleFirstName = (e) => {
+    setFirstName(e.target.value);
+    setNameError("");
+  };
+
+  const handleSubmit = () => {
+    const regexMail =
+      /[a-zA-Z0-9]{0,}([.]?[a-zA-Z0-9]{1,})[@](gmail.com|hotmail.com|yahoo.com)/;
+    if (!email) {
+      setEmailError("Email is required");
+    } else if (!regexMail.test(email)) {
+      setEmailError("Please enter a valid Email");
+    }
+
+    if (!firstName) {
+      setNameError("First name is required");
+    }
+  };
   return (
     <>
       <section className="mt-[50px] mb-20">
@@ -87,16 +114,34 @@ function Contact() {
                   <div className="sm:w-5/12 mt-14 sm:mt-0">
                     <form action="#">
                       <div>
-                        <input
-                          type="text"
-                          placeholder="E-mail Address"
-                          className="py-1 px-3 text-gray-500 border border-gray-400 w-full mb-4"
-                        />
-                        <input
-                          type="text"
-                          placeholder="First Name"
-                          className="py-1 px-3 text-gray-500 border border-gray-400 w-full mb-4"
-                        />
+                        <div className="relative">
+                          <input
+                            onChange={handleEmail}
+                            value={email}
+                            type="Email"
+                            placeholder="E-mail Address"
+                            className="py-1 px-3 text-gray-500 border border-gray-400 w-full mb-6"
+                          />
+                          {emailError && (
+                            <p className="text-white py-1.5 text-center font-lora font-normal text-sm bg-red-700 absolute bottom-0 left-[50%] translate-x-[-50%] w-full z-50">
+                              {emailError}
+                            </p>
+                          )}
+                        </div>
+                        <div className="relative">
+                          <input
+                            onChange={handleFirstName}
+                            value={firstName}
+                            type="text"
+                            placeholder="First Name"
+                            className="py-1 px-3 text-gray-500 border border-gray-400 w-full mb-6"
+                          />
+                          {nameError && (
+                            <p className="text-white py-1.5 text-center font-lora font-normal text-sm bg-red-700 absolute bottom-0 left-[50%] translate-x-[-50%] w-full z-50">
+                              {nameError}
+                            </p>
+                          )}
+                        </div>
                         <input
                           type="text"
                           placeholder="Last Name"
@@ -109,7 +154,10 @@ function Contact() {
                           className="border border-gray-400 py-2 px-3 text-gray-500 w-full"
                         ></textarea>
                         <div className="text-center sm:text-left">
-                          <Link className="font-lora font-medium text-base text-white py-2 px-4 rounded-md bg-primary mt-5">
+                          <Link
+                            onClick={handleSubmit}
+                            className="font-lora font-medium text-base text-white py-2 px-4 rounded-md bg-primary mt-5"
+                          >
                             Sign Petition
                           </Link>
                         </div>
